@@ -149,7 +149,7 @@ h2 {
 .weapon-icon {
   width: 30px; /* Adjust to the size of each weapon */
   height: 30px; /* Adjust to the size of each weapon */
-  background-image: url('/assets/iron-weapons.png');
+  background-image: url('assets/iron-weapons.png');
   background-size: 768px 640px; 
   image-rendering: pixelated; 
 }
