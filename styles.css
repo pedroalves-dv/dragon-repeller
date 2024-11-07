@@ -6,10 +6,11 @@ body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  gap: 20px;
 }
 
 h2 {
@@ -45,6 +46,7 @@ h2 {
   font-size: 0.9em;
   margin-top: 15px;
   line-height: 1.5;
+  height: 100px;
 }
 
 .fade-text span {
@@ -64,7 +66,10 @@ h2 {
   border: 1px solid #633426;
   padding: 5px;
   color: #0a0a23;
+
 }
+
+
 
 #stats {
   display: flex;
@@ -116,16 +121,15 @@ h2 {
 
 /* Inventory Overlay */
 #inventory {
-  position: relative;
-  top: 5%;
-  left: 5%;
   width: 50px;
   height: 200px;
   padding: 5px;
   background-color: #141414;
   border: 2px solid #633426;
   z-index: 10;
-  
+  margin-top: 85px;
+  margin-left: -10px;
+ 
 }
 
 #inventoryList {
@@ -175,6 +179,7 @@ h2 {
   display: flex;
   justify-content: space-around;
   padding: 15px;
+  height: 70px;
 }
 
 /* Monster Stats */
