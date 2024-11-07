@@ -1,0 +1,214 @@
+/* Body & Background */
+body {
+  font-family: 'Font', monospace; 
+  background-color: #1a1a1a;
+  color: #eeeeee;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+h2 {
+  font-size: 4rem;
+  font-family: "Jacquard 12", system-ui;
+  width: 500px;
+  background-color: #111;
+  color: #ecb730;
+  border: 5px solid #333;
+  padding: 20px;
+  box-shadow: 0 0 15px #000;
+  text-align: center;
+}
+
+/* Game Container */
+#game {
+  width: 500px;
+  background-color: #111;
+  color: #eeeeee;
+  border: 5px solid #333;
+  padding: 20px;
+  box-shadow: 0 0 15px #000;
+  text-align: center;
+}
+
+
+/* Text Area */
+#text {
+  background-color: #222;
+  color: #dddddd;
+  border: 2px solid #333;
+  padding: 15px;
+  font-size: 0.9em;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+.fade-text span {
+  opacity: 0;
+  transition: opacity 0.01s ease-in; /* Adjust for fade speed */
+}
+
+.fade-text span.visible {
+  opacity: 1;
+}
+
+#controls,
+.ui {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #633426;
+  padding: 5px;
+  color: #0a0a23;
+}
+
+#stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px;
+  font-size: 0.85em;
+  gap: 5px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 200px
+}
+
+/* Progress Bars */
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  position: relative;
+}
+
+.fill {
+  height: 100%;
+  transition: width 0.2s ease-in-out;
+}
+
+#healthBar {
+  background-color: #e74c3c;
+}
+
+#xpBar{
+  background-color: #ecb730;
+}
+
+/* Inventory Button */
+#inventoryButton {
+  margin: 5px 5px 8px 5px;
+  padding: 5px 10px;
+  background-color: #555;
+  cursor: pointer;
+}
+
+#inventoryButton:hover {
+  background-color: #777;
+}
+
+/* Inventory Overlay */
+#inventory {
+  position: relative;
+  top: 5%;
+  left: 5%;
+  width: 50px;
+  height: 200px;
+  padding: 5px;
+  background-color: #141414;
+  border: 2px solid #633426;
+  z-index: 10;
+  
+}
+
+#inventoryList {
+  display: grid;
+  grid-template-columns: 1fr; /* Two columns, each taking up equal space */
+  gap: 10px; /* Adjust the gap between items as needed */
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  justify-items: center; /* Center items horizontally */
+  align-items: center;
+}
+
+
+.hidden {
+  display: none;
+}
+
+/* Weapon icons container */
+.weapon-icon {
+  width: 30px; /* Adjust to the size of each weapon */
+  height: 30px; /* Adjust to the size of each weapon */
+  background-image: url('/assets/iron-weapons.png');
+  background-size: 768px 640px; 
+  image-rendering: pixelated; 
+}
+
+.weapon-stick {
+  background-position: 192px 0;
+}
+
+.weapon-dagger {
+  background-position: -224px 32px; 
+}
+
+.weapon-hammer {
+  background-position: -160px 32px; 
+}
+
+.weapon-sword {
+  background-position: -256px -256px; 
+}
+
+/* Controls */
+#controls {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+}
+
+/* Monster Stats */
+#monsterStats {
+  display: none;
+  background-color: #6b0c0c;
+  color: #ffffff;
+  border: 3px solid #8b0000;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+.stat {
+  color: #fecc4c;
+  padding-right: 10px;
+}
+
+button {
+  background-color: #555;
+  color: #fdfdfd;
+  font-family: 'Font', monospace;
+  font-size: 0.75em;
+  padding: 15px 20px;
+  margin-bottom: 3px;
+  border: 2px solid #333;
+  box-shadow: 0 4px #222;
+  transition: transform 0.1s;
+}
+
+button:hover {
+  background-color: #5e5e5e;
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #222;
+}
