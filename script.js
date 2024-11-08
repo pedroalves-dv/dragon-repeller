@@ -11,7 +11,9 @@ const goldText = document.querySelector("#goldText");
 
 const monsterStats = document.querySelector("#monsterStats");
 const monsterName = document.querySelector("#monsterName");
-const monsterHealthText = document.querySelector("#monsterHealth");
+const monsterHealthBar = document.querySelector("#monsterHealthBar");
+const monsterElement = document.getElementById("monsterElement");
+const monsterElementContainer = document.getElementById("monsterElementContainer");
 
 const weapons = [
   { name: "Old Stick", power: 5 },
@@ -32,9 +34,169 @@ let fighting;
 let monsterHealth;
 let inventory = ["Old Stick"];
 
-updateHealth(health);
-updateXP(xp);
+// Player Animations
+const playerElement = document.getElementById("player");
+const frameCount = 4; // Number of frames in the animation
+let currentFrame = 0; // Current frame index
+const frameInterval = 400; // Milliseconds per frame, adjust for speed
 
+
+const PlayeridleFrames = [];
+for (let i = 1; i <= frameCount; i++) {
+  const img = new Image();
+  img.src = `/assets/Sprites/Player/idle/idle-export${i}.png`;
+  PlayeridleFrames.push(img.src);
+}
+
+// Animation function
+function animatePlayer() {
+  playerElement.style.backgroundImage = `url('${PlayeridleFrames[currentFrame]}')`;
+  playerElement.style.backgroundSize = 'cover'; // Ensure image scales within box
+  // make the player bigger
+  playerElement.style.width = '100px';
+  playerElement.style.height = '100px';
+  playerElement.style.backgroundPosition = 'center -20px'; // Center image
+  playerElement.style.backgroundRepeat = 'no-repeat'; // Prevent repeat
+  currentFrame = (currentFrame + 1) % frameCount;
+}
+
+// Animate player
+setInterval(animatePlayer, frameInterval);
+
+const monsters = [
+  {
+    name: "One-eyed Vilandra",
+    level: 2,
+    health: 35,
+    frameInterval: 500,
+    idleFrames: Array.from({ length: 8 }, (_, i) => `/assets/Sprites/flying-eye-demon/flying-eye-demon${i + 1}.png`),
+    attackFrames: Array.from({ length: 3 }, (_, i) => `/assets/Sprites/Hit/hit${i + 1}.png`),
+    deathFrames: Array.from({ length: 8 }, (_, i) => `/assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
+    idleFrameCount: 8,    // Frame count for idle animation
+    attackFrameCount: 3,  // Frame count for attack animation
+    deathFrameCount: 8    // Frame count for death animation
+  },
+  {
+    name: "Ogrum the Fanged Beast",
+    level: 8,
+    health: 90,
+    frameInterval: 500,
+    idleFrames: Array.from({ length: 4 }, (_, i) => `/assets/Sprites/Ogre/Idle/ogre-idle${i + 1}.png`),
+    attackFrames: Array.from({ length: 7 }, (_, i) => `/assets/Sprites/Hit/hit${i + 1}.png`),
+    deathFrames: Array.from({ length: 8 }, (_, i) => `/assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
+    idleFrameCount: 4,    // Frame count for idle animation
+    attackFrameCount: 7,  // Frame count for attack animation
+    deathFrameCount: 8    // Frame count for death animation
+    
+  },
+  {
+    name: "Apex Wyrm",
+    level: 20,
+    health: 320,
+    frameInterval: 500,
+    idleFrames: Array.from({ length: 6 }, (_, i) => `/assets/Sprites/Grotto-escape-2-boss-dragon/sprites/idle/dragon${i + 1}.png`),
+    attackFrames: Array.from({ length: 7 }, (_, i) => `/assets/Sprites/Hit/hit${i + 1}.png`),
+    deathFrames: Array.from({ length: 8 }, (_, i) => `/assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
+    idleFrameCount: 6,    // Frame count for idle animation
+    attackFrameCount: 7,  // Frame count for attack animation
+    deathFrameCount: 8    // Frame count for death animation
+  },
+];
+
+let monsterState = "idle";  // Possible values: 'idle', 'attacking', 'dead'
+let monsterCurrentFrame = 0;
+const monsterFrameInterval = 300; // Adjust this based on desired speed
+
+// Update monsterElement size based on the monster's sprite
+function updateMonsterElementSize() {
+  
+  // Load the first frame of the current monster (or any key frame)
+  const img = new Image();
+  img.src = monsters[fighting].idleFrames[0]; // Use idleFrames or any key frame
+
+  img.onload = function() {
+    // Adjust the size of the monster element based on the image's natural dimensions
+    const scale = 100 / img.height;
+    monsterElement.style.width = `${img.width * scale}px`;
+    monsterElement.style.height = `${img.height * scale}px`;
+
+    // Optionally adjust the background position if needed based on orientation
+    // For example, if the monster's sprite is facing a different direction, you could apply a scaleX to flip it:
+    // Adjust any specific properties based on the monster's name
+    if (monsters[fighting].name === "One-eyed Vilandra") {
+      // reset monsterElement styles
+      monsterElement.style.marginBottom = '0px';
+      monsterElement.style.marginLeft = '0px';
+      monsterElement.style.marginRight = '0px';
+      // change
+      monsterElement.style.transform = 'scaleX(-1)'; // Flip the monster image
+    } else if (monsters[fighting].name === "Ogrum the Fanged Beast") {
+      // reset monsterElement styles
+      monsterElement.style.marginBottom = '0px';
+      monsterElement.style.marginLeft = '0px';
+      monsterElement.style.marginRight = '0px';
+      monsterElement.style.transform = '';
+      //change
+      monsterElement.style.height = `${img.height * scale * 1.5}px`;
+      monsterElement.style.width = `${img.width * scale * 1.2}px`;
+      monsterElement.style.marginBottom = '30px'; 
+      monsterElement.style.marginLeft = '110px';
+       // Slightly larger scale for Ogrum
+    } else if (monsters[fighting].name === "Apex Wyrm") {
+      // reset monsterElement styles
+      monsterElement.style.transform = '';
+      monsterElement.style.marginBottom = '0px';
+      monsterElement.style.marginLeft = '0px';
+      monsterElement.style.marginRight = '0px';
+      // change
+      monsterElement.style.width = `${img.width * scale * 1.8}px`;
+      monsterElement.style.height = `${img.height * scale * 1.8}px`;
+      monsterElement.style.marginBottom = '90px';
+      monsterElement.style.transform = 'translateX(-80px)'; // Center the monster image
+
+    }
+  };
+}
+
+function animateMonster() {
+
+  if (fighting < 0 || fighting >= monsters.length) {
+    console.error("Invalid monster index:", fighting);
+    return;
+  }
+
+  let frames;
+
+  switch (monsterState) {
+    case "attacking":
+      frames = monsters[fighting].attackFrames;
+      break;
+    case "dead":
+      frames = monsters[fighting].deathFrames;
+      break;
+    case "idle":
+    default:
+      frames = monsters[fighting].idleFrames;
+      break;
+  }
+
+  if (!frames) {
+    console.error("Frames are undefined for state:", monsterState);
+    return;
+  }
+
+  // Set the background image based on the current frame of the animation
+  monsterElement.style.backgroundImage = `url('${frames[monsterCurrentFrame]}')`;
+  monsterElement.style.backgroundSize = 'contain';
+  monsterElement.style.backgroundPosition = 'center';
+  monsterElement.style.backgroundRepeat = 'no-repeat';
+
+  // Move to the next frame and loop back to 0 if at the end
+  monsterCurrentFrame = (monsterCurrentFrame + 1) % frames.length;
+}
+
+
+// Update Inventory Display
 function updateInventoryDisplay() {
   inventoryList.innerHTML = "";
 
@@ -80,34 +242,19 @@ updateInventoryDisplay();
 function updateHealth(health) {
   healthBar.style.width = `${health}%`;
 }
+updateHealth(health);
 
 function updateXP(xp) {
   xpBar.style.width = `${xp}%`;
 }
+updateXP(xp);
 
-const monsters = [
-  {
-    name: "slime",
-    level: 2,
-    health: 15,
-  },
-  {
-    name: "fanged beast",
-    level: 8,
-    health: 60,
-  },
-  {
-    name: "dragon",
-    level: 20,
-    health: 300,
-  },
-];
 const locations = [
   {
     name: "town square",
     "button text": ["Go to store", "Go to cave", "Fight dragon"],
     "button functions": [goStore, goCave, fightDragon],
-    text: 'You are in the town square. You see a decrepit sign that says "Store".',
+    text: `You are in the town square.\nLights dimly shine from a small shack's window, a decrepit sign reads "Store".\n Faint echoes are coming from a hole in the earth.\nAnd in the distance, clouds give way to a giant shadow...`,
   },
   {
     name: "store",
@@ -121,15 +268,15 @@ const locations = [
   },
   {
     name: "cave",
-    "button text": ["Fight slime", "Fight fanged beast", "Go to town square"],
-    "button functions": [fightSlime, fightBeast, goTown],
-    text: "It's pitch black, adn wet... You see something approaching.",
+    "button text": ["Fight Vilandra", "Fight Ogrum", "Go to town square"],
+    "button functions": [fightVilandra, fightOgrum, goTown],
+    text: "It's pitch black, and wet... You see something approaching.",
   },
   {
     name: "fight",
     "button text": ["Attack", "Dodge", "Run"],
     "button functions": [attack, dodge, goTown],
-    text: "You are fighting a monster.",
+    text: `You are fighting a {monsterName}.`,
   },
   {
     name: "kill monster",
@@ -139,35 +286,38 @@ const locations = [
       "Go to town square",
     ],
     "button functions": [goTown, goTown, easterEgg],
-    text: 'The monster screams "Arg!" as it dies. You gain experience points and find gold.',
+    text: 'The monster screams "Pooplershmeglesteinhhhh!" as it dies. You gain experience points and find gold.',
   },
   {
     name: "lose",
     "button text": ["REPLAY?", "REPLAY?", "REPLAY?"],
     "button functions": [restart, restart, restart],
-    text: "You died. &#x2620;",
+    text: "You've died.",
   },
   {
     name: "win",
     "button text": ["REPLAY?", "REPLAY?", "REPLAY?"],
     "button functions": [restart, restart, restart],
-    text: "You've defeated the dragon! YOU WIN THE GAME! &#x1F389;",
+    text: "You've defeated the Apex Wyrm! YOU WIN THE GAME!",
   },
   {
     name: "easter egg",
     "button text": ["2", "8", "Go to town square?"],
     "button functions": [pickTwo, pickEight, goTown],
-    text: "You find a secret numericron. Pick a number above. Ten numbers will be randomly chosen between 0 and 10. If the number you choose matches one of the random numbers, it might open!",
+    text: "You find a secret numericon. Pick a number above. Ten numbers will be randomly chosen between 0 and 10. If the number you choose matches one of the random numbers, it might open!",
   },
 ];
 
-// initialize buttons
-button1.onclick = goStore;
-button2.onclick = goCave;
-button3.onclick = fightDragon;
+function getLocationText(location) {
+  let text = location.text;
+  if (typeof fighting !== 'undefined' && fighting >= 0 && fighting < monsters.length) {
+    text = text.replace("{monsterName}", monsters[fighting].name);
+  }
+  return text;
+}
 
 // Type text with fade-in effect
-function typeText(text, speed = 40) {
+function typeText(text, speed = 30) {
   const textBox = document.getElementById("text");
   textBox.innerHTML = ""; // Clear previous text
   textBox.classList.add("fade-text"); // Add the class for fade-in styling
@@ -183,14 +333,40 @@ function typeText(text, speed = 40) {
   });
 }
 
+// Initial text
 document.addEventListener("DOMContentLoaded", () => {
   const initialText =
-    "The cold wind rises. And with it, the boiling fires of the deep. No soul dares to dwell in the open.\nFor the world was taken, and belonged to man no more.\nYou are in the town square. Where do you want to go?";
+    "The cold wind rises. And with it, the boiling fires of the deep. No soul dares dwell in the open.\nFor the world was taken, and belonged to man no more.\n\nYet, some lights still flicker...";
   typeText(initialText);
+});
+
+// initialize buttons
+button1.onclick = goStore;
+button2.onclick = goCave;
+button3.onclick = fightDragon;
+// Button event listeners
+document.addEventListener("DOMContentLoaded", () => {
+  const enterTownButton = document.getElementById("button0");
+  const otherButtons = [
+    document.getElementById("button1"),
+    document.getElementById("button2"),
+    document.getElementById("button3"),
+  ];
+
+  enterTownButton.addEventListener("click", () => {
+    enterTownButton.classList.add("hidden");
+    otherButtons.forEach((button) => button.classList.remove("hidden"));
+    goTown();
+  });
 });
 
 // Update the game state
 function update(location) {
+  if (location === locations[3] || location === locations[4]) {
+    monsterStats.style.display = "flex";
+  } else {
+    monsterStats.style.display = "none";  // Hide otherwise
+  }
   monsterStats.style.display = "none";
   button1.innerText = location["button text"][0];
   button2.innerText = location["button text"][1];
@@ -198,9 +374,9 @@ function update(location) {
   button1.onclick = location["button functions"][0];
   button2.onclick = location["button functions"][1];
   button3.onclick = location["button functions"][2];
-  text.innerHTML = location.text;
+  text.innerHTML = getLocationText(location);
 
-  typeText(location.text); // Use the typewriter effect for updating the text
+  typeText(getLocationText(location)); // Use the typewriter effect for updating the text
 }
 
 function goTown() {
@@ -222,9 +398,9 @@ function buyHealth() {
     goldText.innerText = gold;
 
     updateHealth(health); // Update health bar visually
-    typeText("You bought 10 health!");
+    typeText("You've bought 10 health!");
   } else {
-    typeText("You do not have enough gold to buy health... Oh, The humanity!");
+    typeText("You do not have enough gold to buy health... Oh, the humanity!");
   }
 }
 
@@ -236,9 +412,7 @@ function buyWeapon() {
       goldText.innerText = gold;
       let newWeapon = weapons[currentWeapon].name;
       inventory.push(newWeapon);
-      typeText(
-        `You now have a ${newWeapon}! Such power!\nIn your inventory you have: ${inventory}`
-      );
+      typeText(`You now have a ${newWeapon}! Such power!`);
       updateInventoryDisplay();
     } else {
       typeText("You do not have enough gold to buy a weapon.");
@@ -265,12 +439,30 @@ function sellWeapon() {
   }
 }
 
-function fightSlime() {
+
+
+function setMonsterIdle() {
+  monsterState = "idle";
+}
+
+function monsterAttack() {
+  monsterState = "attacking";
+  // Optionally, you can add logic for how long the attack animation should play before switching back to idle.
+  // For example, you could use a setTimeout to call setMonsterIdle after a certain amount of time.
+  setTimeout(setMonsterIdle, 1000);
+}
+
+function monsterDeath() {
+  monsterState = "dead";
+  setTimeout(() => monsterElement.style.display = "none", 1000);
+}
+
+function fightVilandra() {
   fighting = 0;
   goFight();
 }
 
-function fightBeast() {
+function fightOgrum() {
   fighting = 1;
   goFight();
 }
@@ -282,39 +474,71 @@ function fightDragon() {
 
 function goFight() {
   update(locations[3]);
+  console.log("Fighting index:", fighting);
+
   monsterHealth = monsters[fighting].health;
-  monsterStats.style.display = "block";
+  console.log("Monster Health:", monsterHealth);
+
+  monsterStats.style.display = "flex";
   monsterName.innerText = monsters[fighting].name;
-  monsterHealthText.innerText = monsterHealth;
+
+  updateMonsterElementSize();
+  setInterval(animateMonster, monsterFrameInterval);
+  updateMonsterHealthBar();
+  console.log(monsterHealthBar.style.width);
 }
 
+function updateMonsterHealthBar() {
+  monsterHealthBar.style.width = `${monsterHealth * 2}px`;
+  if (monsterHealth <= 0) {
+    monsterHealthBar.style.width = `0px`; // Ensure the health bar is set to 0
+  }
+}
+
+// ATTACK FUNCTION
+
 function attack() {
-  typeText(`The ${monsters[fighting].name} attacks!`);
+ 
   typeText(`You attack with your ${weapons[currentWeapon].name}.`);
-  health -= getMonsterAttackValue(monsters[fighting].level);
+
   if (isMonsterHit()) {
     monsterHealth -=
       weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+      monsterAttack();
+      typeText(`You hit the ${monsters[fighting].name}!`);
   } else {
     typeText(
       `You swing your ${weapons[currentWeapon].name}, alas, you miss...`
     );
   }
-  healthText.innerText = health;
-  monsterHealthText.innerText = monsterHealth;
+  updateMonsterHealthBar(monsterHealth);
+
   if (health <= 0) {
     lose();
   } else if (monsterHealth <= 0) {
+      monsterDeath();
     if (fighting === 2) {
       winGame();
     } else {
       defeatMonster();
     }
   }
+
   if (Math.random() <= 0.1 && inventory.length !== 1) {
     typeText(`Your ${inventory.pop()} breaks... Why god, why?!.`);
     currentWeapon--;
   }
+    // Monster's turn after a delay
+    setTimeout(() => {
+      if (monsterHealth > 0) { // Check if the monster is still alive
+        typeText(`The ${monsters[fighting].name} attacks!`);
+        health -= getMonsterAttackValue(monsters[fighting].level);
+        updateHealth(health); // Update the player's health bar
+        if (health <= 0) {
+          lose();
+        }
+      }
+    }, 3000);
 }
 
 function getMonsterAttackValue(level) {
@@ -335,9 +559,11 @@ function defeatMonster() {
   gold += Math.floor(monsters[fighting].level * 6.7);
   xp += monsters[fighting].level;
   goldText.innerText = gold;
-  xpText.innerText = xp;
-  updateXP(xp); // Update XP bar visually
+  updateXP(xp);
+  updateMonsterHealthBar();
+  monsterDeath(); // Trigger death animation // Set the monster state to 'dead' to play the death animation
   update(locations[4]);
+  monsterStats.style.display = "flex";
 }
 
 function lose() {
@@ -361,6 +587,8 @@ function restart() {
   updateXP(xp); // Reset XP bar
   goTown();
 }
+
+// EASTER EGG
 
 function easterEgg() {
   update(locations[7]);
