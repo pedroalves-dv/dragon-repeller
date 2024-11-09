@@ -44,7 +44,7 @@ const frameInterval = 400; // Milliseconds per frame, adjust for speed
 const PlayeridleFrames = [];
 for (let i = 1; i <= frameCount; i++) {
   const img = new Image();
-  img.src = `/assets/Sprites/Player/idle/idle-export${i}.png`;
+  img.src = `./assets/Sprites/Player/idle/idle-export${i}.png`;
   PlayeridleFrames.push(img.src);
 }
 
@@ -472,6 +472,8 @@ function fightDragon() {
   goFight();
 }
 
+let monsterAnimationInterval;
+
 function goFight() {
   update(locations[3]);
   console.log("Fighting index:", fighting);
@@ -481,10 +483,11 @@ function goFight() {
 
   monsterStats.style.display = "flex";
   monsterName.innerText = monsters[fighting].name;
-
+  
   updateMonsterElementSize();
-  setInterval(animateMonster, monsterFrameInterval);
+  monsterAnimationInterval = setInterval(animateMonster, monsterFrameInterval);
   updateMonsterHealthBar();
+
   console.log(monsterHealthBar.style.width);
 }
 
@@ -556,6 +559,7 @@ function dodge() {
 }
 
 function defeatMonster() {
+  clearInterval(monsterAnimationInterval)
   gold += Math.floor(monsters[fighting].level * 6.7);
   xp += monsters[fighting].level;
   goldText.innerText = gold;
@@ -609,7 +613,7 @@ function pick(guess) {
   }
   typeText(`You picked ${guess}... Here are the random numbers:\n`);
   for (let i = 0; i < 10; i++) {
-    text.innerText += typeText(`${numbers[i]} \n`);
+    typeText(`${numbers[i]} \n`);
   }
   if (numbers.includes(guess)) {
     typeText(`Right! You win 20 gold!`);
