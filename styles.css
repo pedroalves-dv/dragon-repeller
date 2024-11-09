@@ -14,7 +14,6 @@ body {
   height: 100vh;
   gap: 20px;
 }
-
 /* Title */
 h2 {
   font-size: 4rem;
@@ -28,32 +27,34 @@ h2 {
   text-align: center;
   text-shadow: #911f1f 0 5px 0;
 }
-
 /* PLAYER */
 .player-container {
   display: flex;
-  align-items: center;
-  height: 64px;
-  padding-right: 0px;
-  padding-top: 2px;
-  margin-right: -5px
-}
-
-.player {
-  width: 80px;
-  height: 80px; /* Ensure the image fits within the player box *//* Center the image */
-  background-repeat: no-repeat;
-  image-rendering: pixelated; /* Keep pixelated appearance if needed */
+  align-items: center; 
+  height: 64px; /* Match the height of #player */
+  width: 100px;  /* Match the width of #player */
   
+}
+#player {
+  width: 128px; /* Width of a single frame */
+  height: 128px; /* Height of a single frame */
+  background-image: url('assets/player-idle.png');
+  background-size: 512px 128px; /* Total width of the spritesheet */
+  animation: playIdle 1.6s steps(4) infinite; /* 4 frames over 1.6 seconds */
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  margin-bottom: 50px;
+  margin-left: -20px;
+ 
 }
 
 /* Player Sprite Sheet Animation */
-@keyframes animateSprite {
+@keyframes playIdle {
   from {
     background-position: 0px; /* Start at the first frame */
   }
   to {
-    background-position: -256px; /* Move to the last frame (512px for 8 frames × 64px) */
+    background-position: -512px; /* Move to the last frame (512px for 8 frames × 64px) */
   }
 }
 
@@ -67,10 +68,17 @@ h2 {
   box-shadow: 0 0 15px #000;
   text-align: center;
 }
+.ui {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #633426;
+  padding: 5px;
+  color: #0a0a23;
+}
 
 /* Stats and Buttons */
-#controls,
-.ui {
+#controls{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -82,11 +90,10 @@ h2 {
 #stats {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 5px;
   font-size: 0.85em;
   gap: 5px;
-  margin-right: 90px;
+  margin-left: -105px;
 }
 
 .stat {
@@ -101,6 +108,7 @@ h2 {
   width: 100%;
   height: 10px;
   position: relative;
+  border: 1px solid rgb(131, 131, 131);
 }
 
 .fill {
@@ -119,8 +127,8 @@ h2 {
 
 /* Inventory Button */
 #inventoryButton {
-  margin: 5px 20px 8px 5px;
-  padding: 5px 10px;
+  margin: 5px 5px 8px 5px;
+  padding: 5px 15px;
   background-color: #555;
   cursor: pointer;
 }
@@ -137,7 +145,7 @@ h2 {
   background-color: #141414;
   border: 2px solid #633426;
   z-index: 10;
-  margin-top: 85px;
+  margin-top: 35px;
   margin-left: -10px;
 }
 
@@ -182,7 +190,6 @@ h2 {
   background-position: -256px -256px;
 }
 
-
 /* Controls */
 #controls {
   display: flex;
@@ -194,14 +201,13 @@ h2 {
 /* Monster Stats */
 #monsterStats {
   display: none;
-  background-color: #130101;
+  background-color: #111;
   border: 3px solid #8b0000;
-  height: 90px;
+  height: 120px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
-  padding: 10px;
 }
 
 .monsterStatsContainer {
@@ -209,11 +215,13 @@ h2 {
   flex-direction: column;
   justify-content: start;
   align-items: start;
-  padding: 5px;
+  padding: 15px;
   font-size: 1rem;
   gap: 5px;
   height: 100%;
+  margin-top: 20px;
 }
+
 
 #monsterHealthBar {
   max-width: 250px;
@@ -226,18 +234,337 @@ h2 {
   background-color: #ff0000;
 }
 
-
-#monsterElement {
-  width: 80px; /* Adjust based on your monster sprite */
-  height: 80px;
-  background-size: cover;
-  background-repeat: no-repeat;
+#monsterElementContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
 }
 
-.ogrum {
-  width: 100px;
+/* #monsterElement {
+  width: 110px; 
   height: 100px;
+  background-repeat: no-repeat;
+  position: relative;
+  image-rendering: pixelated;
+} */
 
+
+/* Vilandra animations */
+.one-eyed-vilandra-idle {
+  background-image: url('assets/one-eyed-vilandra-idle.png');
+  animation: monsterIdle 2s steps(8) infinite;
+  background-size: 922px 115px;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  width: 100px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+/* Animation for idle state */
+@keyframes monsterIdle {
+  from {
+    background-position: 0px; /* Start at the first frame */
+  }
+  to {
+    background-position: -922px; /* Move to the last frame (512px for 8 frames × 64px) */
+  }
+}
+
+.one-eyed-vilandra-hit {
+  background-image: url('assets/one-eyed-vilandra-hit.png');
+  animation: monsterHit .4s steps(3) infinite; /* Adjust the number of steps here */
+  background-size: 223px 77px; /* Total width of the spritesheet */
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  width: 75px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+
+/* Animation for hit state */
+@keyframes monsterHit {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -223px; 
+  }
+}
+
+.one-eyed-vilandra-attack {
+  background-image: url('assets/one-eyed-vilandra-attack.png');
+  animation: monsterAttack 2s steps(8) infinite;
+  background-size: 922px 115px;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  width: 100px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+/* Animation for idle state */
+@keyframes monsterAttack {
+  from {
+    background-position: 0px; /* Start at the first frame */
+  }
+  to {
+    background-position: -922px; /* Move to the last frame (512px for 8 frames × 64px) */
+  }
+}
+
+.one-eyed-vilandra-death {
+  background-image: url('assets/one-eyed-vilandra-death.png');
+  animation: monsterDeath 1s steps(8) forwards;
+  background-size: 922px 115px;
+  background-repeat: no-repeat;
+  width: 120px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+/* Animation for idle state */
+@keyframes monsterDeath {
+  from {
+    background-position: 0px; /* Start at the first frame */
+  }
+  to {
+    background-position: -922px; /* Move to the last frame (512px for 8 frames × 64px) */
+  }
+}
+
+
+/* ============================================================== */
+/* ============================================================== */
+
+/* testing */
+
+.ogrum-the-fanged-beast-idle {
+  background-image: url('assets/ogrum-the-fanged-beast-attack.png');
+  animation: monsterIdle 2s steps(7) infinite;
+  background-size: 1752px 170px;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 45px;
+}
+
+/* Animation for idle state */
+@keyframes monsterIdle {
+  from {
+    background-position: 0px; /* Start at the first frame */
+  }
+  to {
+    background-position: -1752px; /* Move to the last frame (512px for 8 frames × 64px) */
+  }
+}
+
+
+/* Ogrum Animations */
+
+.ogrum-the-fanged-beast-idle {
+  background-image: url('assets/ogrum-the-fanged-beast-idle.png');
+  animation: monsterIdle 2s steps(4) infinite;
+  background-size: 1152px 160px;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 43px;
+}
+
+@keyframes monsterIdle {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -1152px; 
+  }
+}
+
+.ogrum-the-fanged-beast-hit {
+  background-image: url('assets/ogrum-the-fanged-beast-hit.png');
+  animation: monsterHit .4s steps(3) infinite;
+  background-size: 223px 77px;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  width: 75px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+@keyframes monsterHit {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -223px; 
+  }
+}
+
+.ogrum-the-fanged-beast-attack {
+  background-image: url('assets/ogrum-the-fanged-beast-attack.png');
+  animation: monsterIdle 2s steps(7) forwards;
+  background-size: 1752px 170px;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 45px;
+}
+
+
+@keyframes monsterAttack {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -1752px; 
+  }
+}
+
+.ogrum-the-fanged-beast-death {
+  background-image: url('assets/ogrum-the-fanged-beast-death.png');
+  animation: monsterDeath 1s steps(8) forwards;
+  background-size: 922px 115px;
+  background-repeat: no-repeat;
+  width: 120px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+@keyframes monsterDeath {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -922px;
+  }
+}
+
+
+/* Apex Animations */
+
+.apex-wyrm-idle {
+  background-image: url('assets/apex-wyrm-idle.png');
+  animation: monsterIdle 2s steps(6) infinite;
+  background-size: 2800px 210px;
+  background-repeat: no-repeat;
+  width: 300px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 83px;
+  
+}
+
+@keyframes monsterIdle {
+  from {
+    background-position: -145px; 
+  }
+  to {
+    background-position: -2945px; 
+  }
+}
+
+.apex-wyrm-hit {
+  background-image: url('assets/apex-wyrm-hit.png');
+  animation: monsterHit .4s steps(3) infinite;
+  background-size: 223px 77px;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  width: 75px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+@keyframes monsterHit {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -223px; 
+  }
+}
+
+.apex-wyrm-attack {
+  background-image: url('assets/apex-wyrm-attack.png');
+  animation: monsterIdle 2s steps(7) forwards;
+  background-size: 1752px 170px;
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 45px;
+}
+
+
+@keyframes monsterAttack {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -1752px; 
+  }
+}
+
+.apex-wyrm-death {
+  background-image: url('assets/apex-wyrm-death.png');
+  animation: monsterDeath 1s steps(8) forwards;
+  background-size: 922px 115px;
+  background-repeat: no-repeat;
+  width: 120px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+@keyframes monsterDeath {
+  from {
+    background-position: 0px; 
+  }
+  to {
+    background-position: -922px;
+  }
 }
 
 .stat {
@@ -245,9 +572,6 @@ h2 {
   display: flex;
 }
 
-.gold {
-  justify-content: start;
-}
 
 button {
   background-color: #555;

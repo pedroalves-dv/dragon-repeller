@@ -181,7 +181,7 @@ function getLocationText(location) {
 }
 
 // Type text with fade-in effect
-function typeText(text, speed = 20) {
+function typeText(text, speed = 30) {
   const textBox = document.getElementById("text");
   textBox.innerHTML = ""; // Clear previous text
   textBox.classList.add("fade-text"); // Add the class for fade-in styling
@@ -303,76 +303,40 @@ function sellWeapon() {
   }
 }
 
-// Function to change the monster with specific state
-function changeMonster(monster, state) {
-  // Remove all previous classes to reset the state
-  monsterElement.className = ""; // Clear all classes
-  
-  // Define the base class for the monster based on its name
-  const monsterClass = monster.name.toLowerCase().replace(/ /g, '-');
-  
-  // Define the full class for the monster's current state
-  const stateClass = `${monsterClass}-${state}`;
-  
-  // Apply both the monster's base class and the state class
-  monsterElement.classList.add(monsterClass, stateClass);
-
-  // Track the current state (optional for further logic)
-  currentMonsterState = state;
+function setMonsterIdle() {
+  currentMonsterState = "idle";
 }
 
-// Sets monster to 'idle' after animations end
-function setMonsterStateIdleAfterDelay(delay) {
-  setTimeout(() => changeMonster(currentMonster, 'idle'), delay);
+function setMonsterAttack() {
+  currentMonsterState = "attack";
+  setTimeout(setMonsterIdle, 1000);
 }
 
-// Function for monster to attack with animation
-function monsterAttack() {
-  // change to attack animation
-  changeMonster(currentMonster, 'attack'); 
-  typeText("The " + monsters[fighting].name + " attacks.");
-  // aplly damage to player
-  health -= getMonsterAttackValue(monsters[fighting].level)
-  updateHealth(health);
-
-  // check if monster hits player
-  if(getMonsterAttackValue(monsters[fighting].level) === 0) {
-    typeText("You dodge the attack!");
-  }; 
-
-    if (health <= 0) {
-    lose(); 
-  } 
-  
+function setMonsterDeath() {
+  currentMonsterState = "death";
+  setTimeout(() => monsterElement.style.display = "none", 2000);
 }
-
 
 
 function fightVilandra() {
   fighting = 0;
-  currentMonster = monsters[fighting]; // Set the current monster
-  changeMonster(currentMonster, 'idle'); // Pass the monster object instead of string
+  changeMonster('one-eyed-vilandra', 'idle');
   goFight();
 }
 
 function fightOgrum() {
   fighting = 1;
-  currentMonster = monsters[fighting]; // Set the current monster
-  changeMonster(currentMonster, 'idle'); // Pass the monster object instead of string
   goFight();
 }
 
 function fightDragon() {
   fighting = 2;
-  currentMonster = monsters[fighting]; // Set the current monster
-  changeMonster(currentMonster, 'idle'); // Pass the monster object instead of string
   goFight();
 }
 
 // FIGHT
 function goFight() {
   update(locations[3]);
-  changeMonster(currentMonster, 'idle');
   console.log("Fighting index:", fighting);
 
   monsterHealth = monsters[fighting].health;
@@ -392,24 +356,22 @@ function updateMonsterHealthBar() {
   }
 }
 
+// ATTACK FUNCTION
 
 function attack() {
  
   typeText(`You attack with your ${weapons[currentWeapon].name}.`);
 
   if (isMonsterHit()) {
-      monsterHealth -=
-        weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
-      changeMonster(currentMonster, 'hit'); // Show monster hit reaction
+    monsterHealth -=
+      weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+      monsterAttack();
       typeText(`You hit the ${monsters[fighting].name}!`);
-      setMonsterStateIdleAfterDelay(300)
-      // monsterAttack();
   } else {
     typeText(
       `You swing your ${weapons[currentWeapon].name}, alas, you miss...`
     );
   }
-
   updateMonsterHealthBar(monsterHealth);
 
   if (health <= 0) {
@@ -426,14 +388,18 @@ function attack() {
   if (Math.random() <= 0.1 && inventory.length !== 1) {
     typeText(`Your ${inventory.pop()} breaks... Why god, why?!.`);
     currentWeapon--;
-    updateInventoryDisplay();
   }
     // Monster's turn after a delay
     setTimeout(() => {
       if (monsterHealth > 0) { // Check if the monster is still alive
-        monsterAttack();
+        typeText(`The ${monsters[fighting].name} attacks!`);
+        health -= getMonsterAttackValue(monsters[fighting].level);
+        updateHealth(health); // Update the player's health bar
+        if (health <= 0) {
+          lose();
+        }
       }
-    }, 1000);
+    }, 3000);
 }
 
 function getMonsterAttackValue(level) {
@@ -450,17 +416,8 @@ function dodge() {
   typeText(`You dodge the ${monsters[fighting].name}'s attack. Close call!`);
 }
 
-// Function to set monster's death state
-function monsterDeath() {
-  // change to death animation
-  changeMonster(currentMonster, 'death');
-  setTimeout(() => {
-    // Ensure the death animation has time to complete
-    console.log("Monster has died.");
-  }, 2000);
-}
-
 function defeatMonster() {
+  clearInterval(monsterAnimationInterval)
   gold += Math.floor(monsters[fighting].level * 6.7);
   xp += monsters[fighting].level;
   goldText.innerText = gold;

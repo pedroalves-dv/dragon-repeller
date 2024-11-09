@@ -19,6 +19,9 @@
       <div id="game" class="frame">
         <!-- HUD -->
         <div class="ui">
+          <div class="player-container">
+            <div class="player" id="player"></div>
+          </div>
           
           <div id="stats">
             <span class="stat">
@@ -37,9 +40,7 @@
               Gold: <strong><span id="goldText">50</span></strong>
             </span>
           </div>
-          <div class="player-container">
-            <div class="player" id="player"></div>
-          </div>
+          
           <button id="inventoryButton">Inventory</button>
         </div>
 
@@ -50,9 +51,6 @@
           <button id="button2" class="hidden">Go to cave</button>
           <button id="button3" class="hidden">Fight dragon</button>
         </div>
-
-
-        
         <!-- Monster UI -->
         <div id="monsterStats">
           <div class="monsterStatsContainer">
