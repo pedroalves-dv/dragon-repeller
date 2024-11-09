@@ -69,9 +69,9 @@ const monsters = [
     level: 2,
     health: 35,
     frameInterval: 500,
-    idleFrames: Array.from({ length: 8 }, (_, i) => `./assets/Sprites/flying-eye-demon/flying-eye-demon${i + 1}.png`),
-    attackFrames: Array.from({ length: 3 }, (_, i) => `./assets/Sprites/Hit/hit${i + 1}.png`),
-    deathFrames: Array.from({ length: 8 }, (_, i) => `./assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
+    idleFrames: Array.from({ length: 8 }, (_, i) => `assets/Sprites/flying-eye-demon/flying-eye-demon${i + 1}.png`),
+    attackFrames: Array.from({ length: 3 }, (_, i) => `assets/Sprites/Hit/hit${i + 1}.png`),
+    deathFrames: Array.from({ length: 8 }, (_, i) => `assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
     idleFrameCount: 8,    // Frame count for idle animation
     attackFrameCount: 3,  // Frame count for attack animation
     deathFrameCount: 8    // Frame count for death animation
@@ -81,9 +81,9 @@ const monsters = [
     level: 8,
     health: 90,
     frameInterval: 500,
-    idleFrames: Array.from({ length: 4 }, (_, i) => `./assets/Sprites/Ogre/Idle/ogre-idle${i + 1}.png`),
-    attackFrames: Array.from({ length: 7 }, (_, i) => `./assets/Sprites/Hit/hit${i + 1}.png`),
-    deathFrames: Array.from({ length: 8 }, (_, i) => `./assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
+    idleFrames: Array.from({ length: 4 }, (_, i) => `assets/Sprites/Ogre/Idle/ogre-idle${i + 1}.png`),
+    attackFrames: Array.from({ length: 7 }, (_, i) => `assets/Sprites/Hit/hit${i + 1}.png`),
+    deathFrames: Array.from({ length: 8 }, (_, i) => `assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
     idleFrameCount: 4,    // Frame count for idle animation
     attackFrameCount: 7,  // Frame count for attack animation
     deathFrameCount: 8    // Frame count for death animation
@@ -94,9 +94,9 @@ const monsters = [
     level: 20,
     health: 320,
     frameInterval: 500,
-    idleFrames: Array.from({ length: 6 }, (_, i) => `./assets/Sprites/Grotto-escape-2-boss-dragon/sprites/idle/dragon${i + 1}.png`),
-    attackFrames: Array.from({ length: 7 }, (_, i) => `./assets/Sprites/Hit/hit${i + 1}.png`),
-    deathFrames: Array.from({ length: 8 }, (_, i) => `./assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
+    idleFrames: Array.from({ length: 6 }, (_, i) => `assets/Sprites/Grotto-escape-2-boss-dragon/sprites/idle/dragon${i + 1}.png`),
+    attackFrames: Array.from({ length: 7 }, (_, i) => `assets/Sprites/Hit/hit${i + 1}.png`),
+    deathFrames: Array.from({ length: 8 }, (_, i) => `assets/Sprites/EnemyDeath/enemy-death${i + 1}.png`),
     idleFrameCount: 6,    // Frame count for idle animation
     attackFrameCount: 7,  // Frame count for attack animation
     deathFrameCount: 8    // Frame count for death animation
