@@ -44,7 +44,7 @@ const frameInterval = 400; // Milliseconds per frame, adjust for speed
 const PlayeridleFrames = [];
 for (let i = 1; i <= frameCount; i++) {
   const img = new Image();
-  img.src = `./assets/Sprites/Player/idle/idle-export${i}.png`;
+  img.src = `assets/Sprites/Player/idle/idle-export${i}.png`;
   PlayeridleFrames.push(img.src);
 }
 
