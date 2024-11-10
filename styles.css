@@ -475,7 +475,7 @@ h2 {
 
 /* Apex Animations */
 
-.apex-wyrm-idle {
+/* .apex-wyrm-idle {
   background-image: url('assets/apex-wyrm-idle.png');
   animation: monsterIdle 2s steps(6) infinite;
   background-size: 2800px 210px;
@@ -496,8 +496,30 @@ h2 {
   to {
     background-position: -2945px; 
   }
+} */
+
+.apex-wyrm-idle {
+  background-image: url('assets/apex-wyrm-attack.png');
+  animation: monsterIdle 2s steps(7) infinite;
+  background-size: 2800px 210px;
+  background-repeat: no-repeat;
+  width: 350px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 83px;
+  margin-left: -70px;
 }
 
+@keyframes monsterIdle {
+  from {
+    background-position: -20px; 
+  }
+  to {
+    background-position: -2820px; 
+  }
+}
 .apex-wyrm-hit {
   background-image: url('assets/apex-wyrm-hit.png');
   animation: monsterHit .4s steps(3) infinite;
@@ -523,25 +545,25 @@ h2 {
 
 .apex-wyrm-attack {
   background-image: url('assets/apex-wyrm-attack.png');
-  animation: monsterIdle 2s steps(7) forwards;
-  background-size: 1752px 170px;
+  animation: monsterIdle 2s steps(7) infinite;
+  background-size: 2800px 210px;
   background-repeat: no-repeat;
-  width: 200px;
+  width: 350px;
   height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
-  margin-bottom: 45px;
+  margin-bottom: 83px;
+  margin-left: -70px;
 }
 
 
 @keyframes monsterAttack {
   from {
-    background-position: 0px; 
+    background-position: -20px; 
   }
   to {
-    background-position: -1752px; 
+    background-position: -2820px; 
   }
 }
 
