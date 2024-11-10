@@ -2,18 +2,26 @@ const button1 = document.querySelector("#button1");
 const button2 = document.querySelector("#button2");
 const button3 = document.querySelector("#button3");
 
+const enterTownButton = document.getElementById("button0");
+
 const text = document.querySelector("#text");
 const xpText = document.querySelector("#xpText");
+const maxXpBar = document.querySelector(".max-xp");
 const xpBar = document.getElementById("xpBar");
 const healthText = document.querySelector("#healthText");
+const maxHealthBar = document.querySelector(".max-health");
 const healthBar = document.getElementById("healthBar");
 const goldText = document.querySelector("#goldText");
 
 const monsterStats = document.querySelector("#monsterStats");
 const monsterName = document.querySelector("#monsterName");
-const monsterHealthBar = document.querySelector("#monsterHealthBar");
+
+const monsterMaxHealthBar = document.querySelector(".monster-max-health");
+const monsterHealthBar = document.querySelector(".monster-health");
+
 const monsterElement = document.getElementById("monsterElement");
 const monsterElementContainer = document.getElementById("monsterElementContainer");
+
 const playerElement = document.getElementById("player");
 
 const weapons = [
@@ -28,18 +36,21 @@ const inventoryDisplay = document.getElementById("inventory");
 const inventoryList = document.getElementById("inventoryList");
 
 let xp = 0;
+let maxXp = 100;
 let health = 100;
+let maxHealth = 100;
 let gold = 50;
 let currentWeapon = 0;
 let fighting;
 let monsterHealth;
+let monsterMaxHealth;
 let inventory = ["Old Stick"];
 
 const monsters = [
   {
     name: "One-eyed Vilandra",
     level: 2,
-    health: 35,
+    health: 25,
   },
   {
     name: "Ogrum the Fanged Beast",
@@ -49,7 +60,7 @@ const monsters = [
   {
     name: "Apex Wyrm",
     level: 20,
-    health: 320,
+    health: 250,
   },
 ];
 
@@ -104,12 +115,13 @@ inventoryButton.onclick = () => {
 updateInventoryDisplay();
 
 function updateHealth(health) {
-  healthBar.style.width = `${health}%`;
+  healthBar.style.width = `${health}px`;
+  maxHealthBar.style.width = `${maxHealth}px`;
 }
 updateHealth(health);
 
 function updateXP(xp) {
-  xpBar.style.width = `${xp}%`;
+  xpBar.style.width = `${xp}px`;
 }
 updateXP(xp);
 
@@ -139,7 +151,7 @@ const locations = [
   {
     name: "fight",
     "button text": ["Attack", "Dodge", "Run"],
-    "button functions": [attack, dodge, goTown],
+    "button functions": [attack, dodgeGame, goTown],
     text: `You are fighting a {monsterName}.`,
   },
   {
@@ -170,6 +182,12 @@ const locations = [
     "button functions": [pickTwo, pickEight, goTown],
     text: "You find a secret numericon. Pick a number above. Ten numbers will be randomly chosen between 0 and 10. If the number you choose matches one of the random numbers, it might open!",
   },
+  {
+    name: "start",
+    "button text": ["Enter Town"],
+    "button functions": [goTown],
+    text: "The cold wind rises. And with it, the boiling fires of the deep. No soul dares dwell in the open.\nFor the world was taken, and belonged to man no more.\n\nYet, some lights still flicker...",
+  }
 ];
 
 function getLocationText(location) {
@@ -181,7 +199,7 @@ function getLocationText(location) {
 }
 
 // Type text with fade-in effect
-function typeText(text, speed = 20) {
+function typeText(text, speed = 25) {
   const textBox = document.getElementById("text");
   textBox.innerHTML = ""; // Clear previous text
   textBox.classList.add("fade-text"); // Add the class for fade-in styling
@@ -210,7 +228,6 @@ button2.onclick = goCave;
 button3.onclick = fightDragon;
 // Button event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  const enterTownButton = document.getElementById("button0");
   const otherButtons = [
     document.getElementById("button1"),
     document.getElementById("button2"),
@@ -228,8 +245,12 @@ document.addEventListener("DOMContentLoaded", () => {
 function update(location) {
   if (location === locations[3] || location === locations[4]) {
     monsterStats.style.display = "flex";
-  } else {
-    monsterStats.style.display = "none";  // Hide otherwise
+  } else if (location === locations[9]){
+    button1.classList.add("hidden");
+    button2.classList.add("hidden");
+    button3.classList.add("hidden");
+
+    enterTownButton.classList.remove("hidden"); 
   }
   monsterStats.style.display = "none";
   button1.innerText = location["button text"][0];
@@ -238,6 +259,7 @@ function update(location) {
   button1.onclick = location["button functions"][0];
   button2.onclick = location["button functions"][1];
   button3.onclick = location["button functions"][2];
+ 
   text.innerHTML = getLocationText(location);
 
   typeText(getLocationText(location)); // Use the typewriter effect for updating the text
@@ -258,6 +280,7 @@ function goCave() {
 function buyHealth() {
   if (gold >= 10) {
     gold -= 10;
+    maxHealth = Math.min(health + 10, 200);
     health = Math.min(health + 10, 200); // Ensure health doesn’t exceed 200
     goldText.innerText = gold;
 
@@ -303,8 +326,15 @@ function sellWeapon() {
   }
 }
 
+let currentMonster = monsters[fighting];
+let currentMonsterState = "idle";
+
 // Function to change the monster with specific state
 function changeMonster(monster, state) {
+  if (!monster) {
+    console.error("newMonster is undefined"); // Debugging: Log an error if newMonster is undefined
+    return;
+  }
   // Remove all previous classes to reset the state
   monsterElement.className = ""; // Clear all classes
   
@@ -315,15 +345,20 @@ function changeMonster(monster, state) {
   const stateClass = `${monsterClass}-${state}`;
   
   // Apply both the monster's base class and the state class
-  monsterElement.classList.add(monsterClass, stateClass);
+  monsterElement.classList.add(stateClass);
 
   // Track the current state (optional for further logic)
   currentMonsterState = state;
+  console.log("Monster Element:", monsterElement.className);
 }
 
 // Sets monster to 'idle' after animations end
 function setMonsterStateIdleAfterDelay(delay) {
-  setTimeout(() => changeMonster(currentMonster, 'idle'), delay);
+  setTimeout(() => {
+    if (monsterHealth > 0) { // Ensure the monster is still alive
+      changeMonster(currentMonster, 'idle');
+    }
+  }, delay);
 }
 
 // Function for monster to attack with animation
@@ -335,9 +370,10 @@ function monsterAttack() {
   health -= getMonsterAttackValue(monsters[fighting].level)
   updateHealth(health);
 
+  const dodgeChance = Math.floor(Math.random() * 100);
   // check if monster hits player
-  if(getMonsterAttackValue(monsters[fighting].level) === 0) {
-    typeText("You dodge the attack!");
+  if(dodgeChance <= 25) {
+    dodgeGame();
   }; 
 
     if (health <= 0) {
@@ -347,33 +383,29 @@ function monsterAttack() {
 }
 
 
-
 function fightVilandra() {
   fighting = 0;
   currentMonster = monsters[fighting]; // Set the current monster
-  changeMonster(currentMonster, 'idle'); // Pass the monster object instead of string
   goFight();
 }
 
 function fightOgrum() {
   fighting = 1;
   currentMonster = monsters[fighting]; // Set the current monster
-  changeMonster(currentMonster, 'idle'); // Pass the monster object instead of string
   goFight();
 }
 
 function fightDragon() {
   fighting = 2;
   currentMonster = monsters[fighting]; // Set the current monster
-  changeMonster(currentMonster, 'idle'); // Pass the monster object instead of string
   goFight();
 }
 
 // FIGHT
 function goFight() {
   update(locations[3]);
-  changeMonster(currentMonster, 'idle');
-  console.log("Fighting index:", fighting);
+  changeMonster(currentMonster, currentMonsterState);
+  console.log("Current Monster:", currentMonster, "Fighting index:", fighting);
 
   monsterHealth = monsters[fighting].health;
   console.log("Monster Health:", monsterHealth);
@@ -386,7 +418,8 @@ function goFight() {
 }
 
 function updateMonsterHealthBar() {
-  monsterHealthBar.style.width = `${monsterHealth * 2}px`;
+  monsterMaxHealthBar.style.width = `${monsters[fighting].health}px`;
+  monsterHealthBar.style.width = `${monsterHealth}px`;
   if (monsterHealth <= 0) {
     monsterHealthBar.style.width = `0px`; // Ensure the health bar is set to 0
   }
@@ -446,8 +479,73 @@ function isMonsterHit() {
   return Math.random() > 0.2 || health < 20;
 }
 
-function dodge() {
-  typeText(`You dodge the ${monsters[fighting].name}'s attack. Close call!`);
+
+// ======================== DODGE GAME ========================
+function dodgeGame() {
+  typeText("The monster hesitates... Prepare to dodge!");
+
+  // Show Dodge button and temporarily disable other buttons
+  button1.innerText = "Dodge!";
+  button1.style.backgroundColor = "red"; // Start with noticeable color
+  button2.classList.add("hidden");
+  button3.classList.add("hidden");
+
+  // Start the dodge timer (button changes color back and forth for 2 seconds)
+  const dodgeTime = 2000; // 2 seconds
+  let dodgeSuccess = false;
+
+  const dodgeHandler = () => {
+    dodgeSuccess = true;
+    clearTimeout(dodgeTimeout);
+    button1.removeEventListener("click", dodgeHandler);
+    dodgeSuccessAction();
+  };
+
+  // Listen for dodge button click to succeed
+  button1.addEventListener("click", dodgeHandler);
+
+  // Change color back and forth, then end the dodge game
+  let dodgeTimeout = setTimeout(() => {
+    // Reset the button to its original state
+    resetDodgeGame(dodgeSuccess);
+  }, dodgeTime);
+
+  // Toggle button color for dodge effect
+  let toggleColor = true;
+  const colorInterval = setInterval(() => {
+    button1.style.backgroundColor = toggleColor ? "green" : "red";
+    toggleColor = !toggleColor;
+  }, 200); // Change color every 200ms
+
+  // Stop color toggling once dodge game ends
+  setTimeout(() => clearInterval(colorInterval), dodgeTime);
+}
+
+// Dodge success action
+function dodgeSuccessAction() {
+  typeText("You successfully dodged the attack!");
+  resetDodgeGame(true);
+}
+
+// Reset the dodge game state
+function resetDodgeGame(success) {
+  button1.removeEventListener("click", dodgeHandler);
+  button1.innerText = "Attack";
+  button1.style.backgroundColor = ""; // Reset to original color
+  button2.classList.remove("hidden");
+  button3.classList.remove("hidden");
+
+  if (!success) {
+    // If dodge failed, deal random damage
+    const failDamage = Math.floor(Math.random() * 20) + 5; // Example random damage range
+    health -= failDamage;
+    typeText(`You failed to dodge! The monster hits you for ${failDamage} damage.`);
+    updateHealth(health);
+
+    if (health <= 0) {
+      lose();
+    }
+  }
 }
 
 // Function to set monster's death state
@@ -462,11 +560,13 @@ function monsterDeath() {
 
 function defeatMonster() {
   gold += Math.floor(monsters[fighting].level * 6.7);
-  xp += monsters[fighting].level;
+  // xp += monsters[fighting].level;
+  xp += Math.min(monsters[fighting].level, 100);
+  maxXp += Math.min(monsters[fighting].level, 100);
   goldText.innerText = gold;
   updateXP(xp);
-  updateMonsterHealthBar();
-  monsterDeath(); // Trigger death animation // Set the monster state to 'dead' to play the death animation
+  updateMonsterHealthBar(monsterHealth);
+  
   update(locations[4]);
   monsterStats.style.display = "flex";
 }
@@ -486,11 +586,14 @@ function restart() {
   currentWeapon = 0;
   inventory = ["Old Stick"];
   goldText.innerText = gold;
-  healthText.innerText = health;
-  xpText.innerText = xp;
   updateHealth(health); // Reset health bar
   updateXP(xp); // Reset XP bar
-  goTown();
+  updateInventoryDisplay();
+  replay();
+}
+
+function replay() {
+  location.reload();
 }
 
 // EASTER EGG
