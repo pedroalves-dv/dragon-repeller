@@ -256,7 +256,7 @@ h2 {
 /* Vilandra animations */
 .one-eyed-vilandra-idle {
   background-image: url('assets/one-eyed-vilandra-idle.png');
-  animation: VilandraIdle 2s steps(8) infinite;
+  animation: vilandraIdle 2s steps(8) infinite;
   background-size: 922px 115px;
   background-repeat: no-repeat;
   transform: scaleX(-1);
@@ -268,7 +268,7 @@ h2 {
   margin-right: 20px;
 }
 
-@keyframes VilandraIdle {
+@keyframes vilandraIdle {
   from {
     background-position: 0px;
   }
@@ -304,7 +304,7 @@ h2 {
 
 .one-eyed-vilandra-attack {
   background-image: url('assets/one-eyed-vilandra-attack.png');
-  animation: VilandraAttack 2s steps(8) infinite;
+  animation: vilandraAttack 2s steps(8) infinite;
   background-size: 922px 115px;
   background-repeat: no-repeat;
   transform: scaleX(-1);
@@ -317,7 +317,7 @@ h2 {
 }
 
 /* Animation for idle state */
-@keyframes VilandraAttack {
+@keyframes vilandraAttack {
   from {
     background-position: 0px; /* Start at the first frame */
   }
@@ -414,7 +414,7 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 40px;
 }
 
 @keyframes ogrumHit {
@@ -428,8 +428,8 @@ h2 {
 
 .ogrum-the-fanged-beast-attack {
   background-image: url('assets/ogrum-the-fanged-beast-attack.png');
-  animation: ogrumAttack 2s steps(7) forwards;
-  background-size: 1752px 170px;
+  animation: ogrumAttack 1.5s steps(7) forwards;
+  background-size: 2002px 170px;
   background-repeat: no-repeat;
   width: 200px;
   height: 200px;
@@ -446,7 +446,7 @@ h2 {
     background-position: 0px; 
   }
   to {
-    background-position: -1752px; 
+    background-position: -2002px; 
   }
 }
 
@@ -532,7 +532,7 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 50px;
 }
 
 @keyframes apexHit {

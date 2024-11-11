@@ -159,3 +159,6 @@ const monsters = [
     deathFrameCount: 8    // Frame count for death animation
   },
 ];
+
+
+

@@ -151,7 +151,7 @@ const locations = [
   {
     name: "fight",
     "button text": ["Attack", "Dodge", "Run"],
-    "button functions": [attack, dodgeGame, goTown],
+    "button functions": [attack, dodge, goTown],
     text: `You are fighting a {monsterName}.`,
   },
   {
@@ -256,6 +256,11 @@ function update(location) {
   button1.innerText = location["button text"][0];
   button2.innerText = location["button text"][1];
   button3.innerText = location["button text"][2];
+
+  button1.onclick = null;
+  button2.onclick = null;
+  button3.onclick = null;
+
   button1.onclick = location["button functions"][0];
   button2.onclick = location["button functions"][1];
   button3.onclick = location["button functions"][2];
@@ -361,27 +366,6 @@ function setMonsterStateIdleAfterDelay(delay) {
   }, delay);
 }
 
-// Function for monster to attack with animation
-function monsterAttack() {
-  // change to attack animation
-  changeMonster(currentMonster, 'attack'); 
-  typeText("The " + monsters[fighting].name + " attacks.");
-  // aplly damage to player
-  health -= getMonsterAttackValue(monsters[fighting].level)
-  updateHealth(health);
-
-  const dodgeChance = Math.floor(Math.random() * 100);
-  // check if monster hits player
-  if(dodgeChance <= 25) {
-    dodgeGame();
-  }; 
-
-    if (health <= 0) {
-    lose(); 
-  } 
-  
-}
-
 
 function fightVilandra() {
   fighting = 0;
@@ -404,7 +388,7 @@ function fightDragon() {
 // FIGHT
 function goFight() {
   update(locations[3]);
-  changeMonster(currentMonster, currentMonsterState);
+  changeMonster(currentMonster, 'idle');
   console.log("Current Monster:", currentMonster, "Fighting index:", fighting);
 
   monsterHealth = monsters[fighting].health;
@@ -469,6 +453,29 @@ function attack() {
     }, 1000);
 }
 
+// Function for monster to attack with animation
+function monsterAttack() {
+
+  const dodgeChance = Math.floor(Math.random() * 100);
+ 
+  if(dodgeChance <= 25 || getMonsterAttackValue(monsters[fighting].level) === 0) {
+    dodgeGame();
+  } else {
+      // change to attack animation
+  changeMonster(currentMonster, 'attack'); 
+  typeText("The " + monsters[fighting].name + " attacks.");
+  setMonsterStateIdleAfterDelay(1500);
+  
+  // aplly damage to player
+  health -= getMonsterAttackValue(monsters[fighting].level)
+  updateHealth(health);
+  }
+    if (health <= 0) {
+    lose(); 
+  } 
+  
+}
+
 function getMonsterAttackValue(level) {
   const hit = level * 5 - Math.floor(Math.random() * xp);
   console.log(hit);
@@ -480,73 +487,70 @@ function isMonsterHit() {
 }
 
 
+function dodge() {
+  typeText(`You dodge...Nothing!`);
+}
+
 // ======================== DODGE GAME ========================
 function dodgeGame() {
   typeText("The monster hesitates... Prepare to dodge!");
 
-  // Show Dodge button and temporarily disable other buttons
-  button1.innerText = "Dodge!";
-  button1.style.backgroundColor = "red"; // Start with noticeable color
-  button2.classList.add("hidden");
-  button3.classList.add("hidden");
-
-  // Start the dodge timer (button changes color back and forth for 2 seconds)
+  // Temporarily override the dodge button to handle the dodge game
+  const originalDodgeFunction = dodge; // Save original dodge function
+  button2.removeEventListener("click", originalDodgeFunction); // Remove the existing event listener
+  button2.addEventListener("click", dodgeHandler); // Add dodge handler for dodge game
+  
+  // Start button color toggling for 2 seconds
   const dodgeTime = 2000; // 2 seconds
   let dodgeSuccess = false;
 
-  const dodgeHandler = () => {
-    dodgeSuccess = true;
-    clearTimeout(dodgeTimeout);
-    button1.removeEventListener("click", dodgeHandler);
-    dodgeSuccessAction();
-  };
-
-  // Listen for dodge button click to succeed
-  button1.addEventListener("click", dodgeHandler);
-
-  // Change color back and forth, then end the dodge game
-  let dodgeTimeout = setTimeout(() => {
-    // Reset the button to its original state
-    resetDodgeGame(dodgeSuccess);
-  }, dodgeTime);
-
-  // Toggle button color for dodge effect
   let toggleColor = true;
   const colorInterval = setInterval(() => {
-    button1.style.backgroundColor = toggleColor ? "green" : "red";
+    button2.style.backgroundColor = toggleColor ? "rgb(131, 131, 131)" : "#e74c3c";
     toggleColor = !toggleColor;
   }, 200); // Change color every 200ms
 
-  // Stop color toggling once dodge game ends
-  setTimeout(() => clearInterval(colorInterval), dodgeTime);
-}
+  // Function to handle a successful dodge
+  function dodgeHandler() {
+    dodgeSuccess = true;
+    clearInterval(colorInterval); // Stop color toggling immediately
+    clearTimeout(dodgeTimeout); // Clear dodge timeout so it doesn't trigger
+    button2.removeEventListener("click", dodgeHandler); // Remove dodge handler
+    dodgeSuccessAction(); // Call success action
+  }
 
-// Dodge success action
-function dodgeSuccessAction() {
-  typeText("You successfully dodged the attack!");
-  resetDodgeGame(true);
-}
+  // Timeout for ending the dodge game
+  const dodgeTimeout = setTimeout(() => {
+    clearInterval(colorInterval); // Stop color toggling
+    resetDodgeGame(dodgeSuccess); // Call reset function with dodge result
+  }, dodgeTime);
 
-// Reset the dodge game state
-function resetDodgeGame(success) {
-  button1.removeEventListener("click", dodgeHandler);
-  button1.innerText = "Attack";
-  button1.style.backgroundColor = ""; // Reset to original color
-  button2.classList.remove("hidden");
-  button3.classList.remove("hidden");
+  // Success action when dodge is successful
+  function dodgeSuccessAction() {
+    typeText("You successfully dodged the attack!");
+    resetDodgeGame(true); // Reset button after success
+  }
 
-  if (!success) {
-    // If dodge failed, deal random damage
-    const failDamage = Math.floor(Math.random() * 20) + 5; // Example random damage range
-    health -= failDamage;
-    typeText(`You failed to dodge! The monster hits you for ${failDamage} damage.`);
-    updateHealth(health);
+  // Reset button style and function
+  function resetDodgeGame(dodgeSuccess) {
+    button2.style.backgroundColor = ""; // Reset to original color
+    button2.removeEventListener("click", dodgeHandler); // Remove dodge handler
+    button2.addEventListener("click", originalDodgeFunction); // Restore original dodge function
 
-    if (health <= 0) {
-      lose();
+    if (!dodgeSuccess) {
+      // If dodge failed, deal random damage
+      const failDamage = Math.floor(Math.random() * 20) + 5; // Example random damage range
+      health -= failDamage;
+      typeText(`You failed to dodge! The monster hits you for ${failDamage} damage.`);
+      updateHealth(health);
+
+      if (health <= 0) {
+        lose();
+      }
     }
   }
 }
+
 
 // Function to set monster's death state
 function monsterDeath() {
