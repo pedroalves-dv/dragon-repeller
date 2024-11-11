@@ -152,7 +152,7 @@ const locations = [
     name: "fight",
     "button text": ["Attack", "Dodge", "Run"],
     "button functions": [attack, dodge, goTown],
-    text: `You are fighting a {monsterName}.`,
+    text: `You are fighting {monsterName}.`,
   },
   {
     name: "kill monster",
@@ -162,7 +162,7 @@ const locations = [
       "Go to town square",
     ],
     "button functions": [goTown, goTown, easterEgg],
-    text: 'The monster screams "Pooplershmeglesteinhhhh!" as it dies. You gain experience points and find gold.',
+    text: `You've defeated {monsterName}! You gain experience points and find gold.`,
   },
   {
     name: "lose",
@@ -624,9 +624,11 @@ function pick(guess) {
     typeText(`${numbers[i]} \n`);
   }
   if (numbers.includes(guess)) {
+    
     typeText(`Right! You win 20 gold!`);
     gold += 20;
     goldText.innerText = gold;
+    goTown();
   } else {
     typeText(`Wrong! You lose 10 health!`);
     health -= 10;
