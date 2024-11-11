@@ -7,16 +7,16 @@
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-
     <title>RPG - Dragon Slayer</title>
   </head>
   <body>
     <div></div>
     <div>
-     
-      <h2>Dragon Repeller</h2>
+      <h2><span class="UpperCase">D</span>ragon <span class="UpperCase">S</span>layer <span class="UpperCase">9000</span></h2>
+      <!-- game + inventory container -->
+      <div class="game-and-inventory">
       <!-- game container -->
-      <div id="game" class="frame">
+        <div id="game" class="frame">
         <!-- HUD -->
         <div class="ui">
           <div class="player-container">
@@ -78,10 +78,12 @@
         <div id="text"></div>
 
         <!-- Inventory display modal -->
+        </div>
+        <!-- inventory -->
+        <div id="inventory" class="hidden">
+          <ul id="inventoryList"></ul>
+        </div>
       </div>
-    </div>
-    <div id="inventory" class="hidden">
-      <ul id="inventoryList"></ul>
     </div>
     <script src="./script.js"></script>
   </body>
