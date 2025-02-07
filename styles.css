@@ -19,7 +19,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  gap: 20px;
+  width: 100vw;
+  gap: 210px;
 }
 /* Title */
 h2 {
