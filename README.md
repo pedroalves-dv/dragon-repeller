@@ -1,4 +1,4 @@
-# Dragon Repeller
+# Dragon Slayer 9000
 
 A browser-based role-playing game (RPG) developed using HTML, CSS, and JavaScript.
 Players navigate through various locations, engage in battles with monsters, and aim to defeat a dragon.
