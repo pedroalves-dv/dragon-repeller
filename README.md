@@ -28,7 +28,6 @@ To run the game locally:
    git clone https://github.com/your-username/dragon-repeller.git
    cd dragon-repeller
    ```
-
 ## Contact
 
 For any inquiries, please contact me at [pedroalves.dv@gmail.com].
