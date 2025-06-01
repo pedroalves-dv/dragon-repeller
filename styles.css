@@ -7,46 +7,104 @@
   font-style: normal;
 
 }
-/* Body & Background */
-body {
-  font-family: "Font", monospace;
-  background-color: #1a1a1a;
-  color: #eeeeee;
+
+
+/* ========================================================================= */
+/* Setup */
+
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  justify-content: center;
+}
+
+body {
+  font-family: "Font", monospace;
+  background-color: #0a0a0a;
+  color: #eeeeee;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
-  gap: 210px;
+} 
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 99%;
+  max-width: 600px;
 }
+
+/* ========================================================================= */
 /* Title */
-h2 {
-  font-size: 3rem;
-  font-family: "gothicpixel", serif;
-  width: 500px;
+
+.title-container { 
   background-color: #111;
   color: #ecb730;
-  border: 5px solid #333;
-  padding: 20px;
+  border: 2px solid #333;
+  border-radius: 10px;
   box-shadow: 0 0 15px #000;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+h2 {
+  padding: 20px;
+  padding-top: 30px;
   text-align: center;
   text-shadow: #911f1f 0 5px 0;
-  padding-top: 30px;
-  padding-bottom: 20px;
+  font-size: 2.6rem;
+  font-family: "gothicpixel", serif;
+  width: 500px;
+  /* overflow: hidden; 
+  background-clip: padding-box; */
 }
 
 .UpperCase {
-  font-size: 4rem;
+  font-size: 3.9rem;
 }
-/* PLAYER */
+
+/* ========================================================================= */
+/* Game container */
+
+#game {
+  width: 100%;
+  background-color: #111;
+  color: #eeeeee;
+  border: 2px solid #333;
+  padding: 20px;
+  box-shadow: 0 0 15px #000;
+  gap: 8px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.game-and-inventory {
+  width: 100%;
+  position: relative;
+}
+
+
+/* ========================================================================= */
+/* Player */
+
 .player-container {
   display: flex;
   align-items: center; 
   height: 64px; /* Match the height of #player */
   width: 100px;  /* Match the width of #player */
+  position: relative;
   
 }
 #player {
@@ -57,8 +115,9 @@ h2 {
   animation: playIdle 1.6s steps(4) infinite; /* 4 frames over 1.6 seconds */
   background-repeat: no-repeat;
   image-rendering: pixelated;
-  margin-bottom: 50px;
-  margin-left: -20px;
+  position: absolute;
+  top: -59px; /* Align to the top of the container */
+  left: -28px; /* Align to the left of the container */
  
 }
 
@@ -72,26 +131,21 @@ h2 {
   }
 }
 
-/* GAME CONTAINER */
-#game {
-  width: 500px;
-  background-color: #111;
-  color: #eeeeee;
-  border: 5px solid #333;
-  padding: 20px;
-  box-shadow: 0 0 15px #000;
-  text-align: center;
-}
+
+
+/* ========================================================================= */
+/* Stats and Buttons */
+
 .ui {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   border: 1px solid #633426;
+  border-radius: 6px;
   padding: 5px;
   color: #0a0a23;
 }
 
-/* Stats and Buttons */
 #controls{
   z-index: 10;
   display: flex;
@@ -102,23 +156,27 @@ h2 {
   color: #0a0a23;
 }
 
+/* -------------------------------------------------------------------- */
+/* Stats */
+
 #stats {
   display: flex;
   flex-direction: column;
   padding: 5px;
   font-size: 0.85em;
   gap: 5px;
-  margin-left: -105px;
+  width: 90%;
+  
 }
 
 .stat {
   display: flex;
   align-items: center;
   gap: 5px;
-  width: 200px;
+  color: #fecc4c;
+ 
 }
 
-/* Health Bar */
 .max-health{
   width: 100%;
   height: 10px;
@@ -145,6 +203,9 @@ h2 {
   background-color: #ecb730;
 }
 
+/* -------------------------------------------------------------------- */
+/* Inventory */
+
 /* Inventory Button */
 #inventoryButton {
   margin: 5px 5px 8px 5px;
@@ -154,28 +215,22 @@ h2 {
 }
 
 #inventoryButton:hover {
-  background-color: #777;
+  background-color: #444;
 }
 
-.game-and-inventory {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-}
-
-/* Inventory Overlay */
+/* Inventory Display */
 #inventory {
-  width: 50px;
+  width: 70px;
   height: 200px;
-  padding: 10px;
+  padding: 15px 10px;
   background-color: #141414;
-  border: 2px solid #633426;
+  border: 1px solid #633426;
+  border-radius: 6px;
   box-shadow: 0 0 15px #000;
   z-index: 10;
-  margin-top: 35px;
-  position: relative;
-  top: -34px;
-  left: 20px;
+  position: absolute;
+  top: 0px;
+  left: 620px;
 }
 
 #inventoryList {
@@ -184,7 +239,6 @@ h2 {
   gap: 10px; /* Adjust the gap between items as needed */
   list-style: none;
   padding: 0;
-  margin-top: 5px;
   margin-bottom: 5px;
   justify-items: center; /* Center items horizontally */
   align-items: center;
@@ -194,6 +248,8 @@ h2 {
   display: none;
 }
 
+
+/* -------------------------------------------------------------------- */
 /* Weapon icons container */
 .weapon-icon {
   width: 30px; /* Adjust to the size of each weapon */
@@ -219,24 +275,55 @@ h2 {
   background-position: -256px -256px;
 }
 
+/* -------------------------------------------------------------------- */
 /* Controls */
 #controls {
   display: flex;
   justify-content: space-around;
-  padding: 15px;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.button {
   height: 70px;
 }
 
+button {
+  background-color: #555;
+  color: #fdfdfd;
+  font-family: "Font", monospace;
+  font-size: 0.75em;
+  padding: 30px 20px;
+  margin-bottom: 3px;
+  border: 2px solid #333;
+  box-shadow: 0 4px #222;
+  transition: transform 0.1s;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+
+button:hover {
+  background-color: #444444;
+
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #222;
+}
+
+/* -------------------------------------------------------------------- */
 /* Monster Stats */
 #monsterStats {
   display: none;
   background-color: #111;
-  border: 3px solid #8b0000;
+  border: 1px solid #b31515;
+  border-radius: 6px;
   height: 120px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
 }
 
 .monsterStatsContainer {
@@ -248,9 +335,7 @@ h2 {
   font-size: .85em;
   gap: 5px;
   height: 100%;
-  margin-top: 20px;
 }
-
 
 .monster-max-health {
   max-width: 250px;
@@ -274,6 +359,35 @@ h2 {
 #monsterElement {
   z-index: 9;
 }
+
+/* -------------------------------------------------------------------- */
+/* Text Area */
+#text {
+  background-color: #000000;
+  color: #dddddd;
+  border: 1px solid #3d3d3d;
+  border-radius: 6px;
+  padding: 30px;
+  font-size: 0.9em;
+  /* margin-top: 15px; */
+  line-height: 1.5;
+  height: auto;
+  text-align: center;
+}
+
+
+.fade-text span {
+  opacity: 0;
+  transition: opacity 0.01s ease-in; /* Adjust for fade speed */
+}
+
+.fade-text span.visible {
+  opacity: 1;
+}
+
+
+/*=============================================================================*/
+/* Monster Animations *
 
 
 /* Vilandra animations */
@@ -613,51 +727,4 @@ h2 {
   }
 }
 
-.stat {
-  color: #fecc4c;
-  display: flex;
-}
 
-
-button {
-  background-color: #555;
-  color: #fdfdfd;
-  font-family: "Font", monospace;
-  font-size: 0.75em;
-  padding: 15px 20px;
-  margin-bottom: 3px;
-  border: 2px solid #333;
-  box-shadow: 0 4px #222;
-  transition: transform 0.1s;
-  z-index: 10;
-}
-
-button:hover {
-  background-color: #5e5e5e;
-}
-
-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px #222;
-}
-
-/* Text Area */
-#text {
-  background-color: #222;
-  color: #dddddd;
-  border: 2px solid #333;
-  padding: 15px;
-  font-size: 0.9em;
-  margin-top: 15px;
-  line-height: 1.5;
-  height: 125px;
-}
-
-.fade-text span {
-  opacity: 0;
-  transition: opacity 0.01s ease-in; /* Adjust for fade speed */
-}
-
-.fade-text span.visible {
-  opacity: 1;
-}
