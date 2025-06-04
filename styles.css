@@ -1,12 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Jacquard+12&family=Jacquard+24&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Micro+5&display=swap');
 @font-face {
   font-family: 'gothicpixel';
   src: url('webfontkit-gothicpixel/gothicpixels-webfont.woff') format('woff2'),
        url('webfontkit-gothicpixel/gothicpixels-webfont.woff2') format('woff');
   font-weight: normal;
   font-style: normal;
-
 }
+
 
 
 /* ========================================================================= */
@@ -20,7 +21,7 @@
 
 body {
   font-family: "Font", monospace;
-  background-color: #0a0a0a;
+  background-color: #000000;
   color: #eeeeee;
   display: flex;
   flex-direction: column;
@@ -28,49 +29,59 @@ body {
   justify-content: center;
   height: 100vh;
   width: 100vw;
+ 
 } 
+
+body,
+#game,
+#settingsModal,
+#inventory,
+.ui,
+button,
+#text {
+  transition: background-color .3s;
+}
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   width: 99%;
   max-width: 600px;
+  z-index: 99;
 }
+
+
 
 /* ========================================================================= */
 /* Title */
 
 .title-container { 
-  background-color: #111;
-  color: #ecb730;
-  border: 2px solid #333;
   border-radius: 10px;
-  /* box-shadow: 0 0 15px #000; */
+  position: relative;
+  /* background-image: url('assets/pixel.jpeg'); */
+  background-size: cover;    
+  background-repeat: no-repeat;
+  background-position: center; 
+  height: 130px;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  
+  z-index: -1;
+ 
 }
 
-h2 {
-  padding: 20px;
-  padding-top: 30px;
-  text-align: center;
-  text-shadow: #911f1f 0 5px 0;
-  font-size: 2.6rem;
-  font-family: "gothicpixel", serif;
-  width: 500px;
-  /* overflow: hidden; 
-  background-clip: padding-box; */
-}
-
-.UpperCase {
-  font-size: 3.9rem;
+.title-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/pixel.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: grayscale(1) brightness(2) contrast(2) invert(1);
+  pointer-events: none;
+  border-radius: 8px;
+  z-index: 0;
 }
 
 /* ========================================================================= */
@@ -78,16 +89,16 @@ h2 {
 
 #game {
   width: 100%;
-  background-color: #111;
+  background-color: #1f1f1f;
   color: #eeeeee;
-  border: 2px solid #333;
+  border: 2px solid #b1b1b1;
   padding: 20px;
-  /* box-shadow: 0 0 15px #000; */
-  gap: 8px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-
+  justify-content: center;
+  gap: 10px;
+  z-index: 10;
 }
 
 .game-and-inventory {
@@ -102,8 +113,8 @@ h2 {
 .player-container {
   display: flex;
   align-items: center; 
-  height: 64px; /* Match the height of #player */
-  width: 100px;  /* Match the width of #player */
+  height: 64px;
+  width: 82px; 
   position: relative;
   
 }
@@ -111,14 +122,14 @@ h2 {
   width: 128px; /* Width of a single frame */
   height: 128px; /* Height of a single frame */
   background-image: url('assets/player-idle.png');
-  background-size: 512px 128px; /* Total width of the spritesheet */
+  background-size: 512px 118px;/* Total width of the spritesheet */
   animation: playIdle 1.6s steps(4) infinite; /* 4 frames over 1.6 seconds */
   background-repeat: no-repeat;
   image-rendering: pixelated;
   position: absolute;
-  top: -59px; /* Align to the top of the container */
-  left: -28px; /* Align to the left of the container */
- 
+  top: -65px; 
+  left: -35px;
+  transform: scale(1.4);
 }
 
 /* Player Sprite Sheet Animation */
@@ -134,27 +145,44 @@ h2 {
 
 
 /* ========================================================================= */
-/* Stats and Buttons */
+/* Player HUD and Buttons */
 
 .ui {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border: 1px solid #633426;
+  align-items: center;
+  border: 1px solid #9c9c9c;
   border-radius: 6px;
   padding: 5px;
-  color: #0a0a23;
+  background-color: #000000;
 }
 
 #controls{
   z-index: 10;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  border: 1px solid #633426;
-  padding: 5px;
-  color: #0a0a23;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  /* border: 1px solid #000000; */
+  padding: 10px;
+  border-radius: 6px;
+  /* background-color: #2b2b2b; */
 }
+
+
+.action-button {
+  font-family: "Font", monospace;
+  font-size: 0.75em;
+  padding: 30px 20px;
+  margin-bottom: 3px;
+  width: 125px;
+  height: 90px;
+  text-align: center;
+  
+}
+
 
 /* -------------------------------------------------------------------- */
 /* Stats */
@@ -162,37 +190,47 @@ h2 {
 #stats {
   display: flex;
   flex-direction: column;
-  padding: 5px;
-  font-size: 0.85em;
+  align-items: start;
+  justify-content: center;
   gap: 5px;
-  width: 90%;
-  
+  width: 80%;
+  height: 90px;
+  font-family: "Jersey 10", sans-serif;
+  color: white; 
 }
 
 .stat {
   display: flex;
   align-items: center;
+  text-align: center;
   gap: 5px;
-  color: #fecc4c;
- 
+  height: 20px;
+  font-size: 2rem;
+  font-family: "Micro 5", sans-serif;
+  vertical-align: middle;
 }
 
 .max-health{
   width: 100%;
-  height: 10px;
+  height: 18px;
   position: relative;
   border: 1px solid rgb(131, 131, 131);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #healthBar {
   height: 100%;
+  padding: 1px;
   transition: width 0.2s ease-in-out;
   background-color: #e74c3c;
 }
 
 .max-xp{
-  width: 100px;
-  height: 10px;
+  width: 135px;
+  height: 18px;
   position: relative;
   border: 1px solid rgb(131, 131, 131);
 }
@@ -203,34 +241,109 @@ h2 {
   background-color: #ecb730;
 }
 
-/* -------------------------------------------------------------------- */
-/* Inventory */
 
-/* Inventory Button */
-#inventoryButton {
-  margin: 5px 5px 8px 5px;
-  padding: 5px 15px;
-  background-color: #555;
+
+
+/* -------------------------------------------------------------------- */
+/* Buttons */
+
+button {
+  background-color: #bbbbbb;
+  color: #000000;
+  border: 1px solid #525252;
+  box-shadow: 0 4px #797979;
+  transition: transform 0.1s;
+  z-index: 10;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-#inventoryButton:hover {
-  background-color: #444;
+
+button:hover {
+  background-color: #ffffff;
 }
 
-/* Inventory Display */
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px #222;
+}
+
+
+/* Settings + Inventory Butttons Container */
+
+.settings-inventory-buttons-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 5px;
+  padding-bottom: 4px;
+}
+
+/* Settings Button */
+
+#settingsButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* Settings Modal */
+
+#settingsModal {
+  width: 70px;
+  height: 60px;
+  background-color: #1d1d1d;
+  border: 1px solid white;
+  border-radius: 6px;
+  z-index: 10;
+  position: absolute;
+  top: 10px;
+  left: 595px;
+  z-index: -1;
+ 
+}
+
+/* Dark Mode Toggle */
+#toggleDarkMode {
+  cursor: pointer;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 3px;
+  z-index: 222;
+
+}
+
+/* Inventory Button */
+#inventoryButton {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #555; */
+  cursor: pointer;
+  
+}
+
+
+/* Inventory Modal */
 #inventory {
   width: 70px;
   height: 200px;
   padding: 15px 10px;
-  background-color: #141414;
-  border: 1px solid #633426;
+  background-color: #1d1d1d;
+  border: 1px solid white;
   border-radius: 6px;
-  /* box-shadow: 0 0 15px #000; */
-  z-index: 10;
+  z-index: -1;
   position: absolute;
-  top: 0px;
-  left: 620px;
+  top: 77px;
+  left: 595px;
 }
 
 #inventoryList {
@@ -246,6 +359,13 @@ h2 {
 
 .hidden {
   display: none;
+}
+
+.show {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -275,50 +395,14 @@ h2 {
   background-position: -256px -256px;
 }
 
-/* -------------------------------------------------------------------- */
-/* Controls */
-#controls {
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  border-radius: 6px;
-}
-
-.button {
-  height: 70px;
-}
-
-button {
-  background-color: #555;
-  color: #fdfdfd;
-  font-family: "Font", monospace;
-  font-size: 0.75em;
-  padding: 30px 20px;
-  margin-bottom: 3px;
-  border: 2px solid #333;
-  box-shadow: 0 4px #222;
-  transition: transform 0.1s;
-  z-index: 10;
-  border-radius: 5px;
-}
-
-
-button:hover {
-  background-color: #444444;
-
-}
-
-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px #222;
-}
 
 /* -------------------------------------------------------------------- */
 /* Monster Stats */
 #monsterStats {
   display: none;
-  background-color: #111;
-  border: 1px solid #b31515;
+  color: white;
+  background-color: #ff2828;
+  /* border: 1px solid #b31515; */
   border-radius: 6px;
   height: 120px;
   flex-direction: row;
@@ -337,16 +421,23 @@ button:active {
   height: 100%;
 }
 
+#monsterName {
+  font-family: 'Font', monospace;
+  font-size: 1rem;
+}
+
 .monster-max-health {
-  max-width: 250px;
-  height: 10px;
-  border: 1px solid rgb(131, 131, 131);
+  width: 250px;
+  height: 20px;
+  border: 1px solid rgb(36, 36, 36);
+  z-index: 99;
 }
 
 .monster-health {
   height: 100%;
   transition: width 0.2s ease-in-out;
   background-color: #e74c3c;
+  z-index: 1;
 }
 
 #monsterElementContainer {
@@ -365,11 +456,9 @@ button:active {
 #text {
   background-color: #000000;
   color: #dddddd;
-  border: 1px solid #3d3d3d;
   border-radius: 6px;
   padding: 30px;
   font-size: 0.9em;
-  /* margin-top: 15px; */
   line-height: 1.5;
   height: auto;
   text-align: center;
@@ -386,10 +475,135 @@ button:active {
 }
 
 
+/* ========================================================================= */
+/* Light Mode */
+
+body {
+  background-color: #ffffff;
+}
+
+#game,
+#settingsModal,
+#inventory {
+  background-color: #ebebeb;
+  border-color: #2b2b2b;
+}
+
+.title-container::before {
+  filter: grayscale(1) brightness(2) contrast(2) invert(0);
+  
+}
+#stats {
+  color: #000000;
+}
+
+.ui {
+  background-color: #ffffff;
+  border-color: #969696;
+}
+
+button,
+.action-button,
+#settingsButton,
+#inventoryButton,
+#toggleDarkMode {
+  background-color: #c7c7c7;
+  border-color: #969696;
+  box-shadow: 0 4px #494949;
+}
+
+button:hover,
+.action-button:hover,
+#settingsButton:hover,
+#inventoryButton:hover,
+#toggleDarkMode:hover {
+  background-color: #a0a0a0;
+}
+
+#toggleDarkMode img {
+  content: url("assets/icons/light-off.png");
+}
+
+#inventoryButton img {
+  content: url("assets/icons/axe-black.png");
+}
+
+#settingsButton img {
+  content: url("assets/icons/scroll-black.png");
+}
+.gold img {
+  content: url("assets/icons/coin-black.png");
+} 
+
+#text {
+  background-color: #ffffff;
+  border-color: #535353;
+  color: #222;
+}
+
+
+
+/* ========================================================================= */
+/* Dark Mode */
+
+body.dark-mode {
+ background-color: #000000;
+}
+
+body.dark-mode #game,
+body.dark-mode #settingsModal,
+body.dark-mode #inventory {
+  background-color: #1f1f1f;
+  border-color: #b1b1b1;
+}
+
+body.dark-mode .title-container::before {
+  filter: grayscale(1) brightness(2) contrast(2) invert(1);
+  
+}
+
+body.dark-mode #stats {
+  color: white;
+}
+
+body.dark-mode .ui {
+  background-color: #000000;
+  border-color: #9c9c9c;
+}
+
+body.dark-mode button,
+body.dark-mode .action-button,
+body.dark-mode #settingsButton,
+body.dark-mode #inventoryButton,
+body.dark-mode #toggleDarkMode {
+  background-color: #bbbbbb;
+  border-color: #525252;
+  box-shadow: 0 4px #797979;
+}
+
+body.dark-mode button:hover,
+body.dark-mode .action-button:hover,
+body.dark-mode #settingsButton:hover,
+body.dark-mode #inventoryButton:hover,
+body.dark-mode #toggleDarkMode:hover {
+  background-color: #ffffff;
+}
+
+body.dark-mode .gold img {
+  content: url("assets/icons/coin-white.png");
+} 
+
+body.dark-mode #text {
+  background-color: #000000;
+  color: #dddddd;
+}
+
+
+
 /*=============================================================================*/
 /* Monster Animations *
 
-
+/* ============================================================== */
 /* Vilandra animations */
 .one-eyed-vilandra-idle {
   background-image: url('assets/one-eyed-vilandra-idle.png');
@@ -486,35 +700,8 @@ button:active {
 }
 
 
+
 /* ============================================================== */
-/* ============================================================== */
-
-/* testing */
-
-/* .ogrum-the-fanged-beast-idle {
-  background-image: url('assets/ogrum-the-fanged-beast-attack.png');
-  animation: monsterIdle 2s steps(7) infinite;
-  background-size: 1752px 170px;
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
-  margin-bottom: 45px;
-}
-
-@keyframes monsterIdle {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: -1752px; 
-  }
-} */
-
-
 /* Ogrum Animations */
 
 .ogrum-the-fanged-beast-idle {
@@ -610,31 +797,8 @@ button:active {
 }
 
 
+/* ============================================================== */
 /* Apex Animations */
-
-/* .apex-wyrm-idle {
- background-image: url('assets/apex-wyrm-attack.png');
-  animation: apexIdle 2s steps(7) infinite;
-  background-size: 2800px 210px;
-  background-repeat: no-repeat;
-  width: 350px;
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 83px;
-  margin-left: -70px;
-  
-}
-
-@keyframes apexIdle {
-   from {
-    background-position: -20px; 
-  }
-  to {
-    background-position: -2820px; 
-  }
-} */
 
 .apex-wyrm-idle {
   background-image: url('assets/apex-wyrm-idle.png');
@@ -647,6 +811,8 @@ button:active {
   justify-content: center;
   align-items: center;
   margin-bottom: 83px;
+  margin-left: -40px;
+  filter: brightness(1.8) contrast(1.2);
 }
 
 @keyframes apexIdle {

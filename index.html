@@ -13,38 +13,44 @@
   <body>
     
     <div class="container">
-      <div class="title-container">
-      <h2><span class="UpperCase">D</span>ragon <span class="UpperCase">S</span>layer <span class="UpperCase">9000</span></h2>
-      </div>
+      <div class="title-container"></div>
       <!-- game + inventory container -->
       <div class="game-and-inventory">
       <!-- game container -->
         <div id="game" class="frame">
         <!-- HUD -->
         <div class="ui">
+          <!-- Player nameplate -->
           <div class="player-container">
             <div class="player" id="player"></div>
           </div>
-          
+          <!-- Player stats -->
           <div id="stats">
             <span class="stat">
-              Health:
+              HP
               <div class="max-health">
                 <div id="healthBar" class="fill"></div>
               </div>
             </span>
             <span class="stat">
-              XP:
+              XP
               <div class="max-xp">
                 <div id="xpBar" class="fill"></div>
               </div>
             </span>
             <span class="stat gold">
-              Gold: <strong><span id="goldText">50</span></strong>
+              <img src="assets/icons/coin-white.png" alt="Settings" width="14" />
+              <span id="goldText">50</span>
             </span>
           </div>
-          
-          <button id="inventoryButton">Inventory</button>
+          <div class="settings-inventory-buttons-container">
+            <button id="settingsButton" title="Settings">
+              <img src="assets/icons/scroll-white.png" alt="Settings" width="20" />
+            </button>
+            <button id="inventoryButton">
+              <img src="assets/icons/axe-white.png" alt="Inventory" width="20"  />
+            </button>
+          </div>
         </div>
 
         <!-- Monster UI -->
@@ -56,7 +62,7 @@
             </span>
 
             <!-- Monster health -->
-            <span class="stat">Health: 
+            <span class="stat">HP: 
               <div id="monsterHealthBar" class="monster-max-health">
                 <div id="monsterHealthFill" class="monster-health"></div>
               </div>
@@ -71,21 +77,28 @@
         </div>
         <!-- Controls -->
         <div id="controls" class="frame">
-          <button id="button0">Enter Town</button>
-          <button id="button1" class="hidden">Go to store</button>
-          <button id="button2" class="hidden">Go to cave</button>
-          <button id="button3" class="hidden">Fight dragon</button>
+          <button id="button0" class="action-button">Enter Town</button>
+          <button id="button1" class="action-button hidden">Go to store</button>
+          <button id="button2" class="action-button hidden">Go to cave</button>
+          <button id="button3" class="action-button hidden">Fight dragon</button>
         </div>
         
 
         <!-- Text log -->
         <div id="text"></div>
 
-        <!-- Inventory display modal -->
+        <!-- Modals -->
         </div>
-        <!-- inventory -->
+        <!-- Inventory -->
         <div id="inventory" class="hidden">
           <ul id="inventoryList"></ul>
+        </div>
+        <!-- Settings -->
+        <div id="settingsModal" class="hidden">
+          <button id="toggleDarkMode">
+            <img src="assets/icons/light-on.png" alt="Light Mode Toggle" width="25"  />
+          </button>
+          
         </div>
       </div>
     </div>

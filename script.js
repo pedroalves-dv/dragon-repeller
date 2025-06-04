@@ -35,6 +35,9 @@ const inventoryButton = document.getElementById("inventoryButton");
 const inventoryDisplay = document.getElementById("inventory");
 const inventoryList = document.getElementById("inventoryList");
 
+const settingsButton = document.getElementById("settingsButton");
+const settingsModal = document.getElementById("settingsModal");
+
 let xp = 0;
 let maxXp = 100;
 let health = 100;
@@ -106,17 +109,36 @@ function updateInventoryDisplay() {
   });
 }
 
-// Toggle Inventory Display
+// Toggle Inventory Modal
 inventoryButton.onclick = () => {
   const isInventoryVisible = !inventoryDisplay.classList.contains("hidden");
   inventoryDisplay.classList.toggle("hidden", isInventoryVisible);
+};
+
+// Toggle Settings Modal
+settingsButton.onclick = () => {
+  const isSettingsVisible = settingsModal.classList.contains("show");
+  if (isSettingsVisible) {
+    settingsModal.classList.remove("show");
+    settingsModal.classList.add("hidden");
+  } else {
+    settingsModal.classList.remove("hidden");
+    settingsModal.classList.add("show");
+  }
+};
+
+// Toggle Dark Mode
+const toggleDarkModeBtn = document.getElementById("toggleDarkMode");
+
+toggleDarkModeBtn.onclick = () => {
+  document.body.classList.toggle("dark-mode");
 };
 
 updateInventoryDisplay();
 
 function updateHealth(health) {
   healthBar.style.width = `${health}px`;
-  maxHealthBar.style.width = `${maxHealth}px`;
+  maxHealthBar.style.width = `${maxHealth + 2}px`;
 }
 updateHealth(health);
 
@@ -135,7 +157,7 @@ const locations = [
   {
     name: "store",
     "button text": [
-      "Buy 10 health\n(10 gold)",
+      "Max HP + 10\n(10 gold)",
       "Buy weapon\n(30 gold)",
       "Go to town square",
     ],
@@ -402,7 +424,7 @@ function goFight() {
 }
 
 function updateMonsterHealthBar() {
-  monsterMaxHealthBar.style.width = `${monsters[fighting].health}px`;
+  monsterMaxHealthBar.style.width = `${monsters[fighting].health + 2}px`;
   monsterHealthBar.style.width = `${monsterHealth}px`;
   if (monsterHealth <= 0) {
     monsterHealthBar.style.width = `0px`; // Ensure the health bar is set to 0
@@ -539,7 +561,7 @@ function dodgeGame() {
 
     if (!dodgeSuccess) {
       // If dodge failed, deal random damage
-      const failDamage = Math.floor(Math.random() * 20) + 5; // Example random damage range
+      const failDamage = Math.floor(Math.random() * 20) + 5; // damage range
       health -= failDamage;
       typeText(`You failed to dodge! The monster hits you for ${failDamage} damage.`);
       updateHealth(health);
@@ -564,7 +586,7 @@ function monsterDeath() {
 
 function defeatMonster() {
   gold += Math.floor(monsters[fighting].level * 6.7);
-  // xp += monsters[fighting].level;
+  
   xp += Math.min(monsters[fighting].level, 100);
   maxXp += Math.min(monsters[fighting].level, 100);
   goldText.innerText = gold;
